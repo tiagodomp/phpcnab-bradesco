@@ -10,6 +10,8 @@ class ReadFileContext
 {
     public $path;
 
+    public $conteudo = [];
+
     public function __construct($path){
         $this->path = (string) $path;
 
@@ -17,7 +19,7 @@ class ReadFileContext
             $file = file($this->path);
 
             if(is_array($file))
-                return $this->__callExtension($this->path, $file);
+                $this->__callExtension($this->path, $file);
         }
 
         if(is_dir($this->path)){
@@ -27,7 +29,7 @@ class ReadFileContext
                 $file = file($filename);
 
                 if(is_array($file))
-                    $dir[] = $this->__callExtension($filename, $file);
+                    $this->__callExtension($filename, $file);
             }
         }
     }
@@ -38,12 +40,17 @@ class ReadFileContext
 
         switch(strtoupper($file['extension'])){
             case 'REM':
-                return new ExtensionRem($file['filename'], $arrayFile);
+                $arrayFile = new ExtensionRem($file['filename'], $arrayFile);
                 break;
             case 'CSV':
-                return null;
+                $arrayFile =  [];
                 break;
         }
 
+        if(empty($arrayFile))
+            return false;
+
+        $this->conteudo = array_merge($this->conteudo, $arrayFile->getArrayFile());
+        return true;
     }
 }

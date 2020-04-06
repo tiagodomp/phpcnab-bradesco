@@ -13,7 +13,7 @@ class ReadFileBase
 
     public $numSequencialRegistro;
 
-    public $linha;
+    public $arrayLinha;
 
     public $tipoCnab;
 
@@ -22,7 +22,7 @@ class ReadFileBase
     public function __construct($idRegistro, $numSequencialRegistro, $linha){
         $this->idRegistro               = (int) $idRegistro;
         $this->numSequencialRegistro    = (int) $numSequencialRegistro;
-        $this->linha                    = (array) $this->getArrayLinha($linha);
+        $this->arrayLinha               = (array) $this->getArrayLinha($linha);
         $this->tipoCnab                 = (int) $this->getTipoCnab($this->linha);
         $this->tipoCnabExtension        = (string) $this->getTipoCnabExtension($idRegistro);
     }

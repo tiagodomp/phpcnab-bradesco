@@ -4,6 +4,8 @@
 namespace Phpcnab\Bradesco\Layout;
 
 
+use Phpcnab\Bradesco\File\ReadFileBase;
+
 class LayoutBase
 {
     public $posicaoInicio;
@@ -25,7 +27,7 @@ class LayoutBase
         $this->parametros = $parametros;
     }
 
-    public function setParametros($linhaCNAB)
+    public function setParametros(ReadFileBase $linha)
     {
         if(count($this->parametros) < 5)
             return (object) [];
@@ -35,11 +37,14 @@ class LayoutBase
         $this->tamanhoCampo  = (int)  $this->parametros[3]; //int
         $this->tipoCampo     = $this->parametros[4]; //int ou string
         $this->aliasCampo    = (string) $this->propiedade;    //string
-        $this->valorCampo    = $this->valueTipoCampo($linhaCNAB);
+        $this->valorCampo    = $this->valueTipoCampo($linha->arrayLinha);
         return $this;
     }
 
     private function valueTipoCampo($linhaCNAB){
+        if(!is_array($linhaCNAB) || empty($linhaCNAB))
+            return [];
+
         $valor = array_slice($linhaCNAB, $this->posicaoInicio - 1, $this->tamanhoCampo);
     }
 

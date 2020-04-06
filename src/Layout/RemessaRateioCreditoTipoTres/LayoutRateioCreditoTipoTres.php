@@ -3,6 +3,7 @@
 
 namespace Phpcnab\Bradesco\Layout\RemessaRateioCreditoTipoTres;
 
+use Phpcnab\Bradesco\File\ReadFileBase;
 use Phpcnab\Bradesco\Layout\LayoutInterface;
 use Phpcnab\Bradesco\Layout\LayoutBase;
 
@@ -41,15 +42,15 @@ class LayoutRateioCreditoTipoTres implements LayoutInterface
 
     public $numSequencialRegistro   = [395,400,'Número Sequencial do Registro de Um em Um', 1, 'number'];
 
-    public function __construct($linhaCNAB){
+    public function __construct(ReadFileBase $linha){
         foreach(get_object_vars($this) as $propiedade => $parametros){
             $layoutBase = new LayoutBase($propiedade, $parametros);
             $layoutBase->unsetParametros();
-            $this->$propiedade = $layoutBase->setParametros($linhaCNAB);
+            $this->$propiedade = $layoutBase->setParametros($linha);
         }
     }
 
-    public function getLinha(){
+    public function get(){
         return $this;
     }
 

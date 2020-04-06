@@ -3,33 +3,63 @@
 
 namespace Phpcnab\Bradesco\Layout;
 
+use Phpcnab\Bradesco\File\ReadFileContext;
 use Phpcnab\Bradesco\Layout\RemessaHeaderLabel\LayoutHeaderLabel;
-use Phpcnab\Bradesco\Layout\RemessaHeaderLabel\LayoutMensagemTipoDois;
-use Phpcnab\Bradesco\Layout\RemessaHeaderLabel\LayoutRateioCreditoTipoTres;
-use Phpcnab\Bradesco\Layout\RemessaHeaderLabel\LayoutTransacaoTipoUm;
+use Phpcnab\Bradesco\Layout\RemessaMensagemTipoDois\LayoutMensagemTipoDois;
+use Phpcnab\Bradesco\Layout\RemessaRateioCreditoTipoTres\LayoutRateioCreditoTipoTres;
+use Phpcnab\Bradesco\Layout\RemessaTransacaoTipoUm\LayoutTransacaoTipoUm;
 
 class LayoutContext
 {
-    public $CNAB
-    public function __construct($arquivoCNAB)
+    public $CNAB;
+    public function __construct(ReadFileContext $file)
     {
-        foreach($arquivoCNAB as $numLinha => $valueLinha){
-            switch($value[0]){
-                case 0:
-                    $layout = new LayoutHeaderLabel($valueLinha);
-                    break;
-                case 1:
-                    $layout = new LayoutTransacaoTipoUm($valueLinha);
-                    break;
-                case 2:
-                    $layout = new LayoutMensagemTipoDois($valueLinha);
-                    break;
-                case 3:
-                    $layout = new LayoutRateioCreditoTipoTres($valueLinha);
-                    break;
-            }
+        if(empty($file->conteudo))
+            return [];
 
-            $this->CNAB[$key] = $layout->getLinha();
+        foreach($file->conteudo as $fileName => $linhasCnab){
+            if(empty($linhasCnab))
+                continue;
+
+            foreach($linhasCnab as $numSequencialRegistro => $linha) {
+                if(empty($linha))
+                    continue;
+
+                switch($linha->idRegistro){
+                    case 0:
+                        $layout = new LayoutHeaderLabel($linha);
+                        break;
+                    case 1:
+                        $layout = new LayoutTransacaoTipoUm($linha);
+                        break;
+                    case 2:
+                        $layout = new LayoutMensagemTipoDois($linha);
+                        break;
+                    case 3:
+                        $layout = new LayoutRateioCreditoTipoTres($linha);
+                        break;
+                }
+                $this->CNAB[$fileName][$numSequencialRegistro] = $layout->get();
+            }
         }
+    }
+
+    public function getFiles()
+    {
+        return array_keys($this->CNAB);
+    }
+
+    public function countFiles()
+    {
+        return count($this->CNAB);
+    }
+
+    public function countLinhas()
+    {
+        $map = [];
+        foreach($this->CNAB as $fileName => $linhas)
+            $map[$fileName] = count($linhas);
+
+        return $map;
     }
 }
