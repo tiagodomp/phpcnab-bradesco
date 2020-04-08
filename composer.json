@@ -13,10 +13,9 @@
     "require": {
         "php": ">=5.6"
     },
-    "require-dev": {
-        "phpunit/phpunit": "~4.8"
-    },
     "autoload": {
-        "psr-4": {"Phpcnab\\Bradesco": "src/"}
-    }
+        "psr-4": {"Phpcnab\\Bradesco\\": "src/"}
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
