@@ -1,0 +1,21 @@
+{
+    "name": "phpcnab/bradesco",
+    "type": "library",
+    "description": "Process file CNAB of Bradesco",
+    "keywords": ["CNAB", "bradesco"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tiago Pereira",
+            "email": "tiagodominguespereira@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+        "psr-4": {"Phpcnab\\Bradesco\\": "src/"}
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
