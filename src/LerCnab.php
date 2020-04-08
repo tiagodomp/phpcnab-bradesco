@@ -18,16 +18,15 @@ class LerCnab
             return ['status' => false, 'msg' => '('.$pathFile.') Não é um caminho válido!'];
 
         $this->file = new ReadFileContext($pathFile);
-
         if(empty($this->file))
             return ['status' => false, 'msg' => '('.$pathFile.') Erro ao processar!'];
 
-        $this->layout = new LayoutContext($file);
+        $this->layout = new LayoutContext($this->file);
     }
 
     public function get()
     {
-        return $this->layout;
+        return $this->layout->get();
     }
 
     public function getFiles()
@@ -38,6 +37,16 @@ class LerCnab
     public function countLinhas()
     {
         return $this->layout->countLinhas();
+    }
+
+    public function isFile()
+    {
+        return $this->file->isFile;
+    }
+
+    public function isDir()
+    {
+        return $this->file->isDir;
     }
 
 }

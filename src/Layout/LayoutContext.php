@@ -44,6 +44,14 @@ class LayoutContext
         }
     }
 
+    public function get()
+    {
+        if(count($this->CNAB) == 1);
+            return current($this->CNAB);
+
+        return $this->CNAB;
+    }
+
     public function getFiles()
     {
         return array_keys($this->CNAB);

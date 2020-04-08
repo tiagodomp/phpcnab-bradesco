@@ -3,8 +3,9 @@
 
 namespace Phpcnab\Bradesco\Layout\RemessaMensagemTipoDois;
 
+use Phpcnab\Bradesco\Layout\LayoutBase;
 
-class ValidatorMensagemTipoDois
+trait ValidatorMensagemTipoDois
 {
-
+    use ValidatorMensagemTipoDois;
 }

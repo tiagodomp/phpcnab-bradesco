@@ -1,10 +1,11 @@
 <?php
 
-
 namespace Phpcnab\Bradesco\Layout\RemessaHeaderLabel;
 
+use Phpcnab\Bradesco\Layout\LayoutBase;
+use Phpcnab\Bradesco\Layout\LayoutValidator;
 
-class ValidatorHeaderLabel
+trait ValidatorHeaderLabel
 {
-
+    use LayoutValidator;
 }

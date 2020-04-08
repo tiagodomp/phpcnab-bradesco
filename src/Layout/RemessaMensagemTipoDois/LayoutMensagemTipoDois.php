@@ -9,6 +9,8 @@ use Phpcnab\Bradesco\Layout\LayoutBase;
 
 class LayoutMensagemTipoDois implements LayoutInterface
 {
+    use ValidatorMensagemTipoDois;
+
     public $TipoRegistro = 'Header Label';
 
     //alias campo tabela          posicao De/a      Nome do Campo  Tam. Campo   Tipo
@@ -44,14 +46,26 @@ class LayoutMensagemTipoDois implements LayoutInterface
 
     public function __construct(ReadFileBase $linha){
         foreach(get_object_vars($this) as $propiedade => $parametros){
-            $layoutBase = new LayoutBase($propiedade, $parametros);
-            $layoutBase->unsetParametros();
-            $this->$propiedade = $layoutBase->setParametros($linha);
+            if($propiedade == 'TipoRegistro')
+                continue;
+
+            $layoutBase             = new LayoutBase($propiedade, $parametros);
+            $newPropiedade          = $layoutBase->setParametros($linha);
+            $newPropiedade          = $this->validateDefault($newPropiedade, $linha->numSequencialRegistro);
+            $newPropiedade          = $this->transformarValor($newPropiedade, $linha->numSequencialRegistro);
+            $propiedadeValidation   = $propiedade.'Validation';
+            $this->$propiedade      = (method_exists($this, $propiedadeValidation)) //Esta na Trait
+                                        ?$this->$propiedadeValidation($newPropiedade, $linha->getNumLinhaRegistro())
+                                        :$newPropiedade;
         }
     }
 
     public function get(){
         return $this;
+    }
+
+    public function getArray(){
+        return get_object_vars($this);
     }
 
     public function getNumSequencialRegistro(){

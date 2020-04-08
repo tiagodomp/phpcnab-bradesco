@@ -26,8 +26,6 @@ class Autoloader
         $this->directory = $baseDirectory;
         $this->prefix = __NAMESPACE__.'\\';
         $this->prefixLength = strlen($this->prefix);
-
-        var_dump($this->directory);exit;
     }
 
     /**

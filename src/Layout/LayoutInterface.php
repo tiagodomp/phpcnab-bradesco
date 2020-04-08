@@ -8,6 +8,8 @@ interface LayoutInterface
 {
     public function get();
 
+    public function getArray();
+
     public function getNumSequencialRegistro();
 
     public function getIdRegistro();

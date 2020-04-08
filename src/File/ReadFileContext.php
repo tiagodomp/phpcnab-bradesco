@@ -10,6 +10,10 @@ class ReadFileContext
 {
     public $path;
 
+    public $isDir = false;
+
+    public $isFile = false;
+
     public $conteudo = [];
 
     public function __construct($path){
@@ -17,6 +21,7 @@ class ReadFileContext
 
         if(is_file($this->path)){
             $file = file($this->path);
+            $this->isFile = true;
 
             if(is_array($file))
                 $this->__callExtension($this->path, $file);
@@ -24,6 +29,7 @@ class ReadFileContext
 
         if(is_dir($this->path)){
             $dir = array_diff(scandir($this->path), ['.', '..']);
+            $this->isDir = true;
             foreach($dir as $file){
                 $filename = $this->path.DIRECTORY_SEPARATOR.$file;
                 $file = file($filename);

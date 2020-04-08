@@ -3,8 +3,10 @@
 
 namespace Phpcnab\Bradesco\Layout\RemessaRateioCreditoTipoTres;
 
+use Phpcnab\Bradesco\Layout\LayoutBase;
+use Phpcnab\Bradesco\Layout\LayoutValidator;
 
-class ValidatorRateioCreditoTipoTres
+trait ValidatorRateioCreditoTipoTres
 {
-
+    use LayoutValidator;
 }

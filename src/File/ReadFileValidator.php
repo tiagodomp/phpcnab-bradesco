@@ -9,7 +9,7 @@ trait ReadFileValidator
     public function getArrayLinha($linha)
     {
         $search = [';', ':']; //caso seja csv
-        return explode('', str_replace($search, '', $linha));
+        return str_split(str_replace($search, '', $linha));
     }
 
     public function getTipoCnab($linha)

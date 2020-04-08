@@ -15,6 +15,8 @@ class ReadFileBase
 
     public $arrayLinha;
 
+    public $stringLinha;
+
     public $tipoCnab;
 
     public $tipoCnabExtension;
@@ -23,8 +25,29 @@ class ReadFileBase
         $this->idRegistro               = (int) $idRegistro;
         $this->numSequencialRegistro    = (int) $numSequencialRegistro;
         $this->arrayLinha               = (array) $this->getArrayLinha($linha);
-        $this->tipoCnab                 = (int) $this->getTipoCnab($this->linha);
+        $this->stringLinha              = (string) $linha;
+        $this->tipoCnab                 = (int) $this->getTipoCnab($linha);
         $this->tipoCnabExtension        = (string) $this->getTipoCnabExtension($idRegistro);
+    }
+
+    public function get()
+    {
+        return $this;
+    }
+
+    public function getArray()
+    {
+        return $this->arrayLinha;
+    }
+
+    public function getString()
+    {
+        return $this->stringLinha;
+    }
+
+    public function getNumLinhaRegistro()
+    {
+        return $this->numSequencialRegistro;
     }
 
 }

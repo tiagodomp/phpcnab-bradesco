@@ -9,6 +9,8 @@ use Phpcnab\Bradesco\Layout\LayoutBase;
 
 class LayoutTransacaoTipoUm implements LayoutInterface
 {
+    use ValidatorTransacaoTipoUm;
+
     public $TipoRegistro = 'Header Label';
 
     //alias campo tabela          posicao De/a      Nome do Campo  Tam. Campo   Tipo
@@ -100,20 +102,32 @@ class LayoutTransacaoTipoUm implements LayoutInterface
 
     public $sufixoCEP                       = [332,334,'Sufixo do CEP', 3, 'number'];
 
-    public $sacadorAvalistaOuSegundaMensagem= [335,394,'Sacador/Avalista ou Segunda Mensagem', 60, 'number'];
+    public $sacadorAvalistaOuSegundaMensagem= [335,394,'Sacador/Avalista ou Segunda Mensagem', 60, 'text'];
 
     public $numSequencialRegistro           = [395,400,'Número Sequencial do Registro de Um em Um', 6, 'number'];
 
     public function __construct(ReadFileBase $linha){
         foreach(get_object_vars($this) as $propiedade => $parametros){
-            $layoutBase = new LayoutBase($propiedade, $parametros);
-            $layoutBase->unsetParametros();
-            $this->$propiedade = $layoutBase->setParametros($linha);
+            if($propiedade == 'TipoRegistro')
+                continue;
+
+            $layoutBase             = new LayoutBase($propiedade, $parametros);
+            $newPropiedade          = $layoutBase->setParametros($linha);
+            $newPropiedade          = $this->validateDefault($newPropiedade, $linha->numSequencialRegistro);
+            $newPropiedade          = $this->transformarValor($newPropiedade, $linha->numSequencialRegistro);
+            $propiedadeValidation   = $propiedade.'Validation';
+            $this->$propiedade      = (method_exists($this, $propiedadeValidation)) //Esta na Trait
+                                        ?$this->$propiedadeValidation($newPropiedade, $linha->getNumLinhaRegistro())
+                                        :$newPropiedade;
         }
     }
 
     public function get(){
         return $this;
+    }
+
+    public function getArray(){
+        return get_object_vars($this);
     }
 
     public function getNumSequencialRegistro(){
