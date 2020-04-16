@@ -11,7 +11,7 @@ class LayoutTransacaoTipoUm implements LayoutInterface
 {
     use ValidatorTransacaoTipoUm;
 
-    public $TipoRegistro = 'Header Label';
+    public $TipoRegistro = 'Transação';
 
     //alias campo tabela          posicao De/a      Nome do Campo  Tam. Campo   Tipo
     public $idRegistro                      = [1,1,'Identificação do Registro', 1, 'number'];

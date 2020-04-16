@@ -37,4 +37,8 @@ class ExtensionRem implements ReadFileInterface
     public function getArrayFile(){
         return $this->linhasCNAB;
     }
+
+    public function countLinhas(){
+        return $this->totalLinhas;
+    }
 }

@@ -14,8 +14,10 @@ class LayoutContext
     public $CNAB;
     public function __construct(ReadFileContext $file)
     {
+        $this->CNAB = [];
+
         if(empty($file->conteudo))
-            return [];
+            return $this;
 
         foreach($file->conteudo as $fileName => $linhasCnab){
             if(empty($linhasCnab))
@@ -69,5 +71,10 @@ class LayoutContext
             $map[$fileName] = count($linhas);
 
         return $map;
+    }
+
+    public function isEmpty()
+    {
+        return is_array($this->CNAB) && empty($this->CNAB);
     }
 }

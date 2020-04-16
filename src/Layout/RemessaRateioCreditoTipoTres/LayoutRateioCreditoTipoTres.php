@@ -12,7 +12,7 @@ class LayoutRateioCreditoTipoTres implements LayoutInterface
     use ValidatorRateioCreditoTipoTres;
 
 
-    public $TipoRegistro = 'Header Label';
+    public $TipoRegistro = 'Rateio Crédito';
 
     //alias campo tabela          posicao De/a      Nome do Campo  Tam. Campo   Tipo
     public $idRegistro              = [1,1,'Identificação do Registro', 1, 'number'];
