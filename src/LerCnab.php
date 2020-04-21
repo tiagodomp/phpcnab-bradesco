@@ -18,7 +18,7 @@ class LerCnab
     private $layout;
 
     private $status = true;
-    private $msg;
+    public $msg;
 
     /**
      * LerCnab constructor.
