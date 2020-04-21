@@ -146,6 +146,9 @@ class LayoutContext
      */
     public function isEmpty()
     {
+        if(!$this->isValid())
+            return true;
+
         return is_array($this->CNAB) && empty($this->CNAB);
     }
 

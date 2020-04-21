@@ -41,12 +41,14 @@ class LerCnab
         if(!$this->file->isValid()){
             $this->status = false;
             $this->msg = '('.$pathFile.') Erro ao tentar abrir o Arquivo!';
+            return $this;
         }
 
         $this->layout = new LayoutContext($this->file);
         if(!$this->layout->isValid()){
             $this->status = false;
             $this->msg = '('.$pathFile.') Erro ao processar, este arquivo não é um CNAB';
+            return $this;
         }
     }
 
@@ -61,7 +63,7 @@ class LerCnab
      */
     public function get()
     {
-        if($this->isValid())
+        if(!$this->isValid())
             return [];
 
         return $this->layout->get();
@@ -78,7 +80,7 @@ class LerCnab
      */
     public function getFiles()
     {
-        if($this->isValid())
+        if(!$this->isValid())
             return [];
 
         return $this->layout->getFiles();
@@ -95,7 +97,7 @@ class LerCnab
      */
     public function lineCount()
     {
-        if($this->isValid())
+        if(!$this->isValid())
             return [];
 
         return $this->layout->lineCount();
@@ -112,7 +114,7 @@ class LerCnab
      */
     public function isFile()
     {
-        if($this->isValid())
+        if(!$this->isValid())
             return false;
 
         return $this->file->isFile;
@@ -129,7 +131,7 @@ class LerCnab
      */
     public function isDir()
     {
-        if($this->isValid())
+        if(!$this->isValid())
             return false;
 
         return $this->file->isDir;
