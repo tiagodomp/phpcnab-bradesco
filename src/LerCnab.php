@@ -33,6 +33,7 @@ class LerCnab
         if(!is_dir($pathFile) && !is_file($pathFile)) {
             $this->status = false;
             $this->msg = '(' . $pathFile . ') Não é um caminho válido!';
+            return $this;
         }
 
         $this->file = new ReadFileContext($pathFile);
@@ -60,6 +61,9 @@ class LerCnab
      */
     public function get()
     {
+        if($this->isValid())
+            return [];
+
         return $this->layout->get();
     }
 
@@ -74,6 +78,9 @@ class LerCnab
      */
     public function getFiles()
     {
+        if($this->isValid())
+            return [];
+
         return $this->layout->getFiles();
     }
 
@@ -88,6 +95,9 @@ class LerCnab
      */
     public function lineCount()
     {
+        if($this->isValid())
+            return [];
+
         return $this->layout->lineCount();
     }
 
@@ -102,6 +112,9 @@ class LerCnab
      */
     public function isFile()
     {
+        if($this->isValid())
+            return false;
+
         return $this->file->isFile;
     }
 
@@ -116,6 +129,9 @@ class LerCnab
      */
     public function isDir()
     {
+        if($this->isValid())
+            return false;
+
         return $this->file->isDir;
     }
 
