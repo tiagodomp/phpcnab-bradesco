@@ -1,11 +1,22 @@
 <?php
-
-
+/*
+ * This file is part of the Phpcnab/Bradesco package.
+ *
+ * (c) Tiago Pereira <tiagodominguespereira@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Phpcnab\Bradesco\File;
 
 
 use Phpcnab\Bradesco\File\ExtensionRem\ExtensionRem;
 
+/**
+ * Class ReadFileContext
+ * @package Phpcnab\Bradesco
+ * @subpackage File
+ */
 class ReadFileContext
 {
     public $path;
@@ -16,6 +27,14 @@ class ReadFileContext
 
     public $conteudo = [];
 
+    /**
+     * ReadFileContext constructor.
+     * @param string $path
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab
+     * @subpackage Bradesco
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     */
     public function __construct($path){
         $this->path = (string) $path;
 
@@ -24,7 +43,7 @@ class ReadFileContext
             $this->isFile = true;
 
             if(is_array($file))
-                $this->__callExtension($this->path, $file);
+                $this->sueByExtension($this->path, $file);
         }
 
         if(is_dir($this->path)){
@@ -35,12 +54,21 @@ class ReadFileContext
                 $file = file($filename);
 
                 if(is_array($file))
-                    $this->__callExtension($filename, $file);
+                    $this->sueByExtension($filename, $file);
             }
         }
     }
 
-    private function __callExtension($fileName, $arrayFile)
+    /**
+     * Processes the file according to its extension
+     * @name sueByExtension
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab
+     * @subpackage Bradesco
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
+    private function sueByExtension($fileName, $arrayFile)
     {
         $file = pathinfo($fileName);
 
@@ -58,5 +86,19 @@ class ReadFileContext
 
         $this->conteudo = array_merge($this->conteudo, $arrayFile->getArrayFile());
         return true;
+    }
+
+    /**
+     * Check that files are valid
+     * @name isValid
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab
+     * @subpackage Bradesco
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
+    public function isValid()
+    {
+        return !empty($this->conteudo);
     }
 }

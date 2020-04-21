@@ -34,17 +34,18 @@ class LayoutMensagemTipoDois implements LayoutInterface
 
     public $dataGravacao            = [95,100,'Data da Gravação do Arquivo', 6, 'number'];
 
-    public $espacoBranco1           = [101,108,'1º Espaço em branco', 8, 'null'];
+    public $espacoBranco1           = [101,108,'1º Espaço em branco', 8, 'blank'];
 
     public $idSistema               = [109,110, 'Identificação do Sistema', 2, 'text'];
 
     public $numSequencialRemessa    = [111,117,'Número Sequencial de Remessa', 7, 'number'];
 
-    public $espacoBranco2           = [118,394,'2º Espaço em Branco', 277, 'null'];
+    public $espacoBranco2           = [118,394,'2º Espaço em Branco', 277, 'blank'];
 
     public $numSequencialRegistro   = [395,400,'Número Sequencial do Registro de Um em Um', 1, 'number'];
 
-    public function __construct(ReadFileBase $linha){
+    public function __construct(ReadFileBase $linha)
+    {
         foreach(get_object_vars($this) as $propiedade => $parametros){
             if($propiedade == 'TipoRegistro')
                 continue;
@@ -52,7 +53,7 @@ class LayoutMensagemTipoDois implements LayoutInterface
             $layoutBase             = new LayoutBase($propiedade, $parametros);
             $newPropiedade          = $layoutBase->setParametros($linha);
             $newPropiedade          = $this->validateDefault($newPropiedade, $linha->numSequencialRegistro);
-            $newPropiedade          = $this->transformarValor($newPropiedade, $linha->numSequencialRegistro);
+            $newPropiedade          = $this->transformValue($newPropiedade, $linha->numSequencialRegistro);
             $propiedadeValidation   = $propiedade.'Validation';
             $this->$propiedade      = (method_exists($this, $propiedadeValidation)) //Esta na Trait
                                         ?$this->$propiedadeValidation($newPropiedade, $linha->getNumLinhaRegistro())
@@ -60,23 +61,67 @@ class LayoutMensagemTipoDois implements LayoutInterface
         }
     }
 
-    public function get(){
+    /**
+     * @interface LayoutInterface
+     * @return LayoutMensagemTipoDois
+     */
+    public function get()
+    {
         return $this;
     }
 
-    public function getArray(){
+    /**
+     * @interface LayoutInterface
+     * @return array
+     */
+    public function getArray()
+    {
         return get_object_vars($this);
     }
 
-    public function getNumSequencialRegistro(){
-        return $this->numSequencialRegistro;
+    /**
+     * @interface LayoutInterface
+     * @return int
+     */
+    public function getNumSequencialRegistro()
+    {
+        return ($this->numSequencialRegistro instanceof LayoutBase)
+            ?$this->numSequencialRegistro->get()
+            :null;
     }
 
-    public function getIdRegistro(){
-        return $this->idRegistro;
+    /**
+     * @interface LayoutInterface
+     * @return integer
+     */
+    public function getIdRegistro()
+    {
+        return ($this->idRegistro instanceof LayoutBase)
+            ?$this->idRegistro->get()
+            :null;
     }
 
-    public function getTipoRegistro(){
+    /**
+     * @interface LayoutInterface
+     * @return string
+     */
+    public function getTipoRegistro()
+    {
         return $this->TipoRegistro;
+    }
+
+    /**
+     * @interface LayoutInterface
+     * @return bool
+     */
+    public function isValid()
+    {
+        $validate = [];
+        $propiedades = get_object_vars($this);
+        unset($propiedades['TipoRegistro']);
+        foreach($propiedades as $propiedade => $parametros)
+            $validate[] = method_exists($this, $propiedade.'Validation') && $parametros instanceof LayoutBase;
+
+        return !empty($validate) && !in_array(false, $validate);
     }
 }

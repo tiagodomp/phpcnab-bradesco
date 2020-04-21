@@ -1,11 +1,38 @@
 <?php
 
 
+/*
+ * This file is part of the Phpcnab/Bradesco package.
+ *
+ * (c) Tiago Pereira <tiagodominguespereira@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Phpcnab\Bradesco\Layout;
 
+/**
+ * trait LayoutValidator
+ * @name LayoutValidator
+ * @copyright (c) 2020, Tiago Pereira
+ * @package Phpcnab
+ * @subpackage Bradesco
+ * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+ */
 trait LayoutValidator
 {
-    public function transformarValor(LayoutBase $propiedade, $numLinha)
+    /**
+     * Transform the value corresponds to the type defined in the Bradesco manual
+     * @param LayoutBase $propiedade
+     * @param $numLinha
+     * @name transformValue
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return LayoutBase $propiedade
+     */
+    public function transformValue(LayoutBase $propiedade, $numLinha)
     {
         switch($propiedade->tipoCampo){
             case 'number':
@@ -19,7 +46,7 @@ trait LayoutValidator
                 $pv = implode('', $propiedade->valorCampoArray);
                 $propiedade->valorCampo = (strlen($pv) == $propiedade->tamanhoCampo)?$pv:'';
                 break;
-            case 'null':
+            case 'blank':
                 $pv = implode('', $propiedade->valorCampoArray);
                 $propiedade->valorCampo = (strlen($pv) == $propiedade->tamanhoCampo)
                     ?$pv
@@ -32,7 +59,18 @@ trait LayoutValidator
         }
         return $propiedade;
     }
-    
+
+    /**
+     * Checks if the value corresponds to the type defined in the Bradesco manual
+     * @param LayoutBase $propiedade
+     * @param integer $numLinha
+     * @name validateDefault
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return LayoutBase $propiedade
+     */
     public function validateDefault(LayoutBase $propiedade, $numLinha)
     {
         switch($propiedade->tipoCampo){
@@ -50,8 +88,8 @@ trait LayoutValidator
                     $propiedade->msg        = $this->msgDefault($propiedade, '(Erro) É obrigatório ser um campo alfanumérico', $numLinha);
                 }
                 break;
-            case 'null':
-                if(!$this->is_null($propiedade)) {
+            case 'blank':
+                if(!$this->is_blank($propiedade)) {
                     $propiedade->status     = false;
                     $propiedade->valorCampo = null;
                     $propiedade->msg        = $this->msgDefault($propiedade, '(Erro) É obrigatório ser um campo em branco', $numLinha);
@@ -66,21 +104,62 @@ trait LayoutValidator
         return $propiedade;
     }
 
+    /**
+     * Checks if the value of the field is numeric
+     * @param LayoutBase $propiedade
+     * @name is_number
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
     public function is_number(LayoutBase $propiedade)
     {
         return $propiedade->tipoCampo == 'number' && is_numeric(implode('', $propiedade->valorCampoArray));
     }
 
+    /**
+     * Checks if the value of the field is text
+     * @param LayoutBase $propiedade
+     * @name is_text
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
     public function is_text(LayoutBase $propiedade)
     {
         return $propiedade->tipoCampo == 'text' && strlen(implode('', $propiedade->valorCampoArray)) > 0;
     }
 
-    public function is_null(LayoutBase $propiedade)
+    /**
+     * Checks if the value of the field is blank
+     * @param LayoutBase $propiedade
+     * @name is_blank
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
+    public function is_blank(LayoutBase $propiedade)
     {
-        return $propiedade->tipoCampo == 'null' && strlen(implode('', $propiedade->valorCampoArray)) > 0;
+        return $propiedade->tipoCampo == 'blank' && strlen(implode('', $propiedade->valorCampoArray)) > 0;
     }
 
+    /**
+     * @param LayoutBase $propiedade
+     * @param string $complemento
+     * @param integer $numseqRegistro
+     * @name msgDefault
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return string
+     */
     public function msgDefault(LayoutBase $propiedade, $complemento, $numseqRegistro)
     {
         return "O campo $propiedade->nomeCampo localizado na linha $numseqRegistro, entre as colunas $propiedade->posicaoInicio e $propiedade->posicaoFinal: $complemento";

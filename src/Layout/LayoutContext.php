@@ -9,9 +9,31 @@ use Phpcnab\Bradesco\Layout\RemessaMensagemTipoDois\LayoutMensagemTipoDois;
 use Phpcnab\Bradesco\Layout\RemessaRateioCreditoTipoTres\LayoutRateioCreditoTipoTres;
 use Phpcnab\Bradesco\Layout\RemessaTransacaoTipoUm\LayoutTransacaoTipoUm;
 
+/**
+ * class LayoutContext
+ * @name LayoutContext
+ * @copyright (c) 2020, Tiago Pereira
+ * @package Phpcnab/Bradesco
+ * @subpackage Layout
+ * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+ */
 class LayoutContext
 {
+    /**
+     * Array containing all valid files
+     * @var array
+     */
     public $CNAB;
+
+
+    /**
+     * LayoutContext constructor.
+     * @param ReadFileContext $file
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     */
     public function __construct(ReadFileContext $file)
     {
         $this->CNAB = [];
@@ -41,11 +63,24 @@ class LayoutContext
                         $layout = new LayoutRateioCreditoTipoTres($linha);
                         break;
                 }
-                $this->CNAB[$fileName][$numSequencialRegistro] = $layout->get();
+                if($layout->isValid())
+                    $this->CNAB[$fileName][$numSequencialRegistro] = $layout->get();
             }
         }
     }
 
+    /**
+     * If only one file is valid: it will return an array containing all ['numberLine': int => Line: object].
+     *
+     * If two or more files are valid: will return an array containing all ['nameFile': string => ['numberLine': int => Line: object]].
+     *
+     * @name get
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return array
+     */
     public function get()
     {
         if(count($this->CNAB) == 1);
@@ -54,17 +89,44 @@ class LayoutContext
         return $this->CNAB;
     }
 
+    /**
+     * Gets valid files
+     * @name getFiles
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return array
+     */
     public function getFiles()
     {
         return array_keys($this->CNAB);
     }
 
+    /**
+     * Counts valid files
+     * @name countFiles
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return int
+     */
     public function countFiles()
     {
         return count($this->CNAB);
     }
 
-    public function countLinhas()
+    /**
+     * Counts valid lines per file
+     * @name lineCount
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return array
+     */
+    public function lineCount()
     {
         $map = [];
         foreach($this->CNAB as $fileName => $linhas)
@@ -73,8 +135,31 @@ class LayoutContext
         return $map;
     }
 
+    /**
+     * Check that no files are valid
+     * @name isEmpty
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
     public function isEmpty()
     {
         return is_array($this->CNAB) && empty($this->CNAB);
+    }
+
+    /**
+     * Check that files are valid
+     * @name isValid
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage Layout
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     * @return bool
+     */
+    public function isValid()
+    {
+        return is_array($this->CNAB) && !empty($this->CNAB);
     }
 }

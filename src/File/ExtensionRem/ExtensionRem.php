@@ -1,18 +1,42 @@
 <?php
 
-
+/*
+ * This file is part of the Phpcnab/Bradesco package.
+ *
+ * (c) Tiago Pereira <tiagodominguespereira@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Phpcnab\Bradesco\File\ExtensionRem;
 
 
 use Phpcnab\Bradesco\File\ReadFileBase;
 use Phpcnab\Bradesco\File\ReadFileInterface;
 
+/**
+ * Class ExtensionRem
+ * @package Phpcnab\Bradesco\File\ExtensionRem
+ * @copyright (c) 2020, Tiago Pereira
+ * @package Phpcnab/Bradesco
+ * @subpackage File
+ * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+ */
 class ExtensionRem implements ReadFileInterface
 {
     public $totalLinhas;
 
     public $linhasCNAB;
 
+    /**
+     * ExtensionRem constructor.
+     * @param $nomeArquivo
+     * @param $arrayArquivo
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab/Bradesco
+     * @subpackage File
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+     */
     public function __construct($nomeArquivo, $arrayArquivo){
         $this->totalLinhas = count($arrayArquivo);
 
@@ -26,19 +50,35 @@ class ExtensionRem implements ReadFileInterface
         }
     }
 
+    /**
+     * @interface ReadFileInterface
+     * @return array
+     */
     public function getFiles(){
-        return array_keys($this->linhasCNAB);
+        return (array) array_keys($this->linhasCNAB);
     }
 
+    /**
+     * @interface ReadFileInterface
+     * @return array
+     */
     public function getLinha($nomeArquivo, $numSqRegistro){
-        return $this->linhasCNAB[$nomeArquivo][$numSqRegistro]?:[];
+        return (array) $this->linhasCNAB[$nomeArquivo][$numSqRegistro]?:[];
     }
 
+    /**
+     * @interface ReadFileInterface
+     * @return array
+     */
     public function getArrayFile(){
-        return $this->linhasCNAB;
+        return (array) $this->linhasCNAB;
     }
 
-    public function countLinhas(){
-        return $this->totalLinhas;
+    /**
+     * @interface ReadFileInterface
+     * @return integer
+     */
+    public function lineCount(){
+        return (int) $this->totalLinhas;
     }
 }

@@ -1,12 +1,28 @@
 <?php
 
-
+/*
+ * This file is part of the Phpcnab/Bradesco package.
+ *
+ * (c) Tiago Pereira <tiagodominguespereira@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Phpcnab\Bradesco\Layout\RemessaTransacaoTipoUm;
 
 use Phpcnab\Bradesco\File\ReadFileBase;
 use Phpcnab\Bradesco\Layout\LayoutInterface;
 use Phpcnab\Bradesco\Layout\LayoutBase;
 
+/**
+ * class LayoutTransacaoTipoUm
+ * @interface LayoutInterface
+ * @name LayoutTransacaoTipoUm
+ * @copyright (c) 2020, Tiago Pereira
+ * @package Phpcnab/Bradesco
+ * @subpackage Layout
+ * @author Tiago Pereira <tiagodominguespereira@gmail.com>
+ */
 class LayoutTransacaoTipoUm implements LayoutInterface
 {
     use ValidatorTransacaoTipoUm;
@@ -106,7 +122,12 @@ class LayoutTransacaoTipoUm implements LayoutInterface
 
     public $numSequencialRegistro           = [395,400,'Número Sequencial do Registro de Um em Um', 6, 'number'];
 
-    public function __construct(ReadFileBase $linha){
+    /**
+     * LayoutTransacaoTipoUm constructor.
+     * @param ReadFileBase $linha
+     */
+    public function __construct(ReadFileBase $linha)
+    {
         foreach(get_object_vars($this) as $propiedade => $parametros){
             if($propiedade == 'TipoRegistro')
                 continue;
@@ -114,7 +135,7 @@ class LayoutTransacaoTipoUm implements LayoutInterface
             $layoutBase             = new LayoutBase($propiedade, $parametros);
             $newPropiedade          = $layoutBase->setParametros($linha);
             $newPropiedade          = $this->validateDefault($newPropiedade, $linha->numSequencialRegistro);
-            $newPropiedade          = $this->transformarValor($newPropiedade, $linha->numSequencialRegistro);
+            $newPropiedade          = $this->transformValue($newPropiedade, $linha->numSequencialRegistro);
             $propiedadeValidation   = $propiedade.'Validation';
             $this->$propiedade      = (method_exists($this, $propiedadeValidation)) //Esta na Trait
                                         ?$this->$propiedadeValidation($newPropiedade, $linha->getNumLinhaRegistro())
@@ -122,23 +143,67 @@ class LayoutTransacaoTipoUm implements LayoutInterface
         }
     }
 
-    public function get(){
+    /**
+     * @interface LayoutInterface
+     * @return LayoutTransacaoTipoUm
+     */
+    public function get()
+    {
         return $this;
     }
 
-    public function getArray(){
+    /**
+     * @interface LayoutInterface
+     * @return array
+     */
+    public function getArray()
+    {
         return get_object_vars($this);
     }
 
-    public function getNumSequencialRegistro(){
-        return $this->numSequencialRegistro;
+    /**
+     * @interface LayoutInterface
+     * @return int
+     */
+    public function getNumSequencialRegistro()
+    {
+        return ($this->numSequencialRegistro instanceof LayoutBase)
+            ?$this->numSequencialRegistro->get()
+            :null;
     }
 
-    public function getIdRegistro(){
-        return $this->idRegistro;
+    /**
+     * @interface LayoutInterface
+     * @return integer
+     */
+    public function getIdRegistro()
+    {
+        return ($this->idRegistro instanceof LayoutBase)
+                ?$this->idRegistro->get()
+                :null;
     }
 
-    public function getTipoRegistro(){
+    /**
+     * @interface LayoutInterface
+     * @return string
+     */
+    public function getTipoRegistro()
+    {
         return $this->TipoRegistro;
+    }
+
+    /**
+     * @interface LayoutInterface
+     * @return bool
+     */
+    public function isValid()
+    {
+        $validate = [];
+        $propiedades = get_object_vars($this);
+        unset($propiedades['TipoRegistro']);
+        foreach($propiedades as $propiedade => $parametros)
+            $validate[] = method_exists($this, $propiedade.'Validation') && $parametros instanceof LayoutBase;
+
+        return !empty($validate) && !in_array(false, $validate);
     }
 }

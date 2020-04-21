@@ -20,6 +20,10 @@ class Autoloader
 
     /**
      * @param string $baseDirectory Base directory where the source files are located.
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab
+     * @subpackage Bradesco
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
      */
     public function __construct($baseDirectory = __DIR__)
     {
@@ -30,8 +34,11 @@ class Autoloader
 
     /**
      * Registers the autoloader class with the PHP SPL autoloader.
-     *
      * @param bool $prepend Prepend the autoloader on the stack instead of appending it.
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab
+     * @subpackage Bradesco
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
      */
     public static function register($prepend = false)
     {
@@ -40,8 +47,11 @@ class Autoloader
 
     /**
      * Loads a class from a file using its fully qualified name.
-     *
      * @param string $className Fully qualified name of a class.
+     * @copyright (c) 2020, Tiago Pereira
+     * @package Phpcnab
+     * @subpackage Bradesco
+     * @author Tiago Pereira <tiagodominguespereira@gmail.com>
      */
     public function autoload($className)
     {
