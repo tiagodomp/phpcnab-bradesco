@@ -16,7 +16,7 @@ class LayoutHeaderLabel implements LayoutInterface
     //alias campo tabela          posicao De/a      Nome do Campo  Tam. Campo   Tipo
     public $idRegistro              = [1,1,'Identificação do Registro', 1, 'number'];
 
-    public $idArquivoRemessa        = [2,2,'Identificação do Arquivo Remessa ', 2, 'number'];
+    public $idArquivoRemessa        = [2,2,'Identificação do Arquivo Remessa ', 1, 'number'];
 
     public $literalRemessa          = [3,9,'Literal Remessa', 7, 'text'];
 
