@@ -121,7 +121,7 @@ class LayoutRateioCreditoTipoTres implements LayoutInterface
         $propiedades = get_object_vars($this);
         unset($propiedades['TipoRegistro']);
         foreach($propiedades as $propiedade => $parametros)
-            $validate[] = method_exists($this, $propiedade.'Validation') && $parametros instanceof LayoutBase;
+            $validate[] = $parametros instanceof LayoutBase;
 
         return !empty($validate) && !in_array(false, $validate);
     }
